@@ -25,7 +25,14 @@ class MoveMessage(ClientMessage):
 class UseBeanMessage(ClientMessage):
     def __init__(self):
         super().__init__('heal')
+
+class ClientSetNameMessage(ClientMessage):
+    def __init__(self, name):
+        super().__init__('set_name', { 'name': name})
  
+msg = ClientSetNameMessage('micah')
+print(msg.toJSON())
+
 # msg = UseBeanMessage()
 # print(msg.toJSON())
 
