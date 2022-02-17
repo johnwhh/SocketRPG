@@ -1,16 +1,25 @@
 import asyncio
 import websockets
+from game import Game
 
-async def hello(websocket, path):
-  print("Path: {}".format(path))
-  name = await websocket.recv()
-  print("< {}".format(name))
 
-  greeting = "Hello {}!".format(name)
-  await websocket.send(greeting)
-  print("> {}".format(greeting))
+class Server:
+    def __init__(self):
+        self.game = Game()
 
-start_server = websockets.serve(hello, 'localhost', 9292)
+    async def _handleInput(self, websocket, path):
+        name = await websocket.recv()
+        print("{} has connected.".format(name))
 
-asyncio.get_event_loop().run_until_complete(start_server)
-asyncio.get_event_loop().run_forever()
+        greeting = "Hello {}! You have successfully connected.".format(name)
+        await websocket.send(greeting)
+
+    def start(self):
+        runGameLoop = websockets.serve(self._handleInput, 'localhost', 9292)
+
+        asyncio.get_event_loop().run_until_complete(runGameLoop)
+        asyncio.get_event_loop().run_forever()
+
+
+server = Server()
+server.start()
