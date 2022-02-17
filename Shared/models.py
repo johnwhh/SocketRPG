@@ -12,7 +12,6 @@ class Position:
     def zero():
         return Position(0, 0)
 
-
 class Entity:
     def __init__(self, id, name, position):
         self.id = id

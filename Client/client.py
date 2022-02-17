@@ -1,14 +1,24 @@
-import asyncio
 import websockets
+import asyncio
+import sys
+sys.path.append(sys.path[0] + '/..')
 
-async def hello():
+from Shared.Message import ClientSetNameMessage
+
+async def listenForMessages(websocket):
+    async for message in websocket:
+        print(f"Received message: {message}")
+        await websocket.send(message)
+
+
+async def connectToServer():
     async with websockets.connect('ws://localhost:9292') as websocket:
 
         name = input("What's your name? ")
-        await websocket.send(name)
-        print("> {}".format(name))
+        nameMessage = ClientSetNameMessage(name)
 
-        greeting = await websocket.recv()
-        print("< {}".format(greeting))
+        await websocket.send(nameMessage.toJSON())
 
-asyncio.get_event_loop().run_until_complete(hello())
+        asyncio.get_event_loop().run_until_complete(await listenForMessages(websocket))
+
+asyncio.get_event_loop().run_until_complete(connectToServer())
