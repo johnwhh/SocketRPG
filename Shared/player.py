@@ -3,7 +3,6 @@ class Position:
         self.x = x
         self.y = y
 
-
 class Entity:
     def __init__(self, id, name, position):
         self.id = id
