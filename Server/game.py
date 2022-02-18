@@ -60,11 +60,17 @@ class Game:
     def start(self, entityDict=dict()):
         self.entityDict = entityDict
         self._spawnMonsters(5)
-        if len(self.entityDict.items()) != 6:
-            raise ValueError
 
     def getCurrentMap(self):
         return MapFactory().makeMapString(self.entityDict)
+
+    def addNewPlayer(self, id):
+        player = Player(id, f"Player {id}", self._getRandomVacantPosition())
+        print(f"Adding player {player} with id {id}")
+        self.entityDict[id] = player
+
+    def removePlayer(self, id):
+        del self.entityDict[id]
 
     def movePlayer(self, id, direction):
         newPosition = self._getNewPosition(
