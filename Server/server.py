@@ -50,14 +50,14 @@ class Server:
             del self.sockets[websocket.id]
             return
 
-        print(self.game.getCurrentMap())
+        print(self.game.getGlobalMap())
         await self._broadcastMap()
 
     async def _broadcastMap(self):
-        print("Boradcasting map...")
+        print("Broadcasting map...")
         [print(f"socket: {socket}") for id, socket in self.sockets.items()]
         for id, websocket in self.sockets.items():
-            await websocket.send(self.game.getCurrentMap())
+            await websocket.send(self.game.getCurrentMap(self.playerIdDict[id]))
 
     def _getAvailablePlayerId(self):
         allPlayerIds = list(self.playerIdDict.values())
@@ -78,6 +78,6 @@ class Server:
         asyncio.get_event_loop().run_until_complete(runGameLoop)
         asyncio.get_event_loop().run_forever()
 
-
-server = Server()
-server.start()
+if __name__ == "__main__":
+    server = Server()
+    server.start()

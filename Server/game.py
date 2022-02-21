@@ -37,6 +37,11 @@ class MapFactory:
             string += " |\n"
         return string
 
+    def makeStatsString(self, entityDict, id):
+        if entityDict[id] is not None:
+            return f"Health: {entityDict[id].health}\nBeans: {entityDict[id].beanCount}"
+        return ""
+
     def _getCharacterFromEntity(self, entity):
         if type(entity) is Player:
             return str(entity.id)
@@ -61,8 +66,13 @@ class Game:
         self.entityDict = entityDict
         self._spawnMonsters(5)
 
-    def getCurrentMap(self):
-        return MapFactory().makeMapString(self.entityDict)
+    def getCurrentMap(self, id):
+        factory = MapFactory()
+        return factory.makeMapString(self.entityDict) + "\n" + factory.makeStatsString(self.entityDict, id)
+
+    def getGlobalMap(self):
+        factory = MapFactory()
+        return factory.makeMapString(self.entityDict)
 
     def addNewPlayer(self, id):
         player = Player(id, f"Player {id}", self._getRandomVacantPosition())
